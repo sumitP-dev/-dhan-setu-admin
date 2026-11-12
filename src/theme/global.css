@@ -1,0 +1,10 @@
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background: var(--mantine-color-gray-0);
+  -webkit-font-smoothing: antialiased;
+}

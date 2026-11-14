@@ -1,6 +1,7 @@
 import {
   AppShell,
   Avatar,
+  Badge,
   Burger,
   Group,
   Menu,
@@ -9,15 +10,26 @@ import {
   UnstyledButton,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconChevronDown, IconId, IconLogout } from '@tabler/icons-react';
+import {
+  IconChevronDown,
+  IconCreditCard,
+  IconId,
+  IconLogout,
+  IconUsers,
+} from '@tabler/icons-react';
 import { NavLink as RouterNavLink, Outlet } from 'react-router';
 
 import { useSignOut } from '../features/auth/hooks';
+import { usePendingKycCount } from '../features/kyc/hooks';
 import { useIdleSignOut } from '../hooks/useIdleSignOut';
 import { useAppSelector } from '../store';
 import { BrandMark } from './BrandMark';
 
-const NAV_ITEMS = [{ to: '/kyc', label: 'KYC review', icon: IconId }];
+const NAV_ITEMS = [
+  { to: '/users', label: 'Users', icon: IconUsers },
+  { to: '/cards', label: 'Cards', icon: IconCreditCard },
+  { to: '/kyc', label: 'KYC review', icon: IconId },
+];
 
 function initials(name: string): string {
   return name
@@ -33,6 +45,7 @@ export function AppLayout() {
   const admin = useAppSelector(state => state.auth.admin);
   const signOut = useSignOut();
   useIdleSignOut();
+  const pendingKyc = usePendingKycCount();
 
   return (
     <AppShell
@@ -83,6 +96,19 @@ export function AppLayout() {
             to={item.to}
             label={item.label}
             leftSection={<item.icon size={18} stroke={1.5} />}
+            rightSection={
+              item.to === '/kyc' && pendingKyc.data ? (
+                <Badge
+                  size="sm"
+                  variant="light"
+                  color="yellow"
+                  radius="sm"
+                  aria-label="Waiting for review"
+                >
+                  {pendingKyc.data}
+                </Badge>
+              ) : null
+            }
             onClick={close}
             styles={{ root: { borderRadius: 'var(--mantine-radius-sm)' } }}
           />

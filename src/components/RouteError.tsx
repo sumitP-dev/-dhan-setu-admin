@@ -20,8 +20,8 @@ function ErrorPage({ notFound }: { notFound: boolean }) {
             ? 'This page doesn’t exist.'
             : 'The page couldn’t be shown. Reload, and if it keeps happening, tell the team.'}
         </Text>
-        <Button variant="default" mt="sm" component="a" href="/kyc">
-          Go to KYC review
+        <Button variant="default" mt="sm" component="a" href="/">
+          Go to the start page
         </Button>
       </Stack>
     </Center>

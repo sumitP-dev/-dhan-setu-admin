@@ -16,7 +16,7 @@ export function renderApp(path: string, preloadedState?: Partial<RootState>) {
   const view = render(
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <MantineProvider theme={theme}>
+        <MantineProvider theme={theme} env="test">
           <RouterProvider router={router} />
         </MantineProvider>
       </QueryClientProvider>

@@ -26,7 +26,7 @@ export function SignInPage() {
   const { status, signOutReason } = useAppSelector(state => state.auth);
   const [pending, setPending] = useState<Pending | null>(null);
 
-  const from = (location.state as { from?: string } | null)?.from ?? '/kyc';
+  const from = (location.state as { from?: string } | null)?.from ?? '/';
   if (status === 'signedIn') {
     return <Navigate to={from} replace />;
   }

@@ -6,6 +6,18 @@ The web admin portal for Dhan Setu, for administrators only. It talks to the bac
 React + Vite + TypeScript, Mantine (UI), React Router, TanStack React Query (server data),
 Redux Toolkit (app state), react-hook-form + zod, Vitest + Testing Library.
 
+## What's in it
+
+| Section                 | What admins can do                                                                                                                                                                                                                                                                                                                                                                                             |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Users** (`/users`)    | Everyone who signed up: search by name, email or phone; filter by KYC or account status. A user's page has **Profile**, **KYC** (status, who decided, rejection reason and note) and **Cards** (active and removed) tabs.                                                                                                                                                                                      |
+| **Cards** (`/cards`)    | All saved cards with their owners: search by last 4 digits or owner; filter by status, network, type. Click the owner to open their page.                                                                                                                                                                                                                                                                      |
+| **KYC review** (`/kyc`) | Submissions waiting for review (longest-waiting first; the sidebar shows how many), plus verified, rejected and in-progress lists. A review page shows the DigiLocker details (Aadhaar and PAN masked), name match, PAN check, selfie liveness and match score, and history. **Approve**, or **Reject** with a reason (the user sees the reason's message; the note is for admins only, required for "Other"). |
+
+Users and Cards are view only. Searches and opened records are audited by the backend, so
+those pages don't refetch on window focus. Search, filters, page and tab live in the URL,
+so reload and shared links show the same view.
+
 ## Run it
 
 Needs Node 20+ and the backend running on http://localhost:8000.
@@ -64,10 +76,13 @@ src/
   store/        Redux Toolkit: auth slice (status, admin, sign-out reason) and thunks
   navigation/   routes and the signed-in guard
   components/   layout (header, sidebar, account menu) and shared UI
-  hooks/        idle sign-out
+  hooks/        idle sign-out; list search/filters/page kept in the URL
+  utils/        dates, expiry and label formatting
   features/
     auth/       sign-in: api.ts, hooks.ts, schemas.ts (zod), screens/, components/
-    kyc/        KYC review (queue and decisions arrive in A3)
+    users/      users list and user page (profile, KYC, cards tabs)
+    cards/      cards list and the shared cards table
+    kyc/        review queue, review page, approve / reject dialogs
   theme/        Mantine theme: muted navy accent, neutral greys
   testing/      test setup and render helpers
 ```

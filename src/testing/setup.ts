@@ -27,6 +27,11 @@ class ResizeObserverStub {
 }
 window.ResizeObserver = ResizeObserverStub;
 window.HTMLElement.prototype.scrollIntoView = vi.fn();
+// Mantine's auto-growing Textarea listens for web fonts loading.
+Object.defineProperty(document, 'fonts', {
+  configurable: true,
+  value: { addEventListener: vi.fn(), removeEventListener: vi.fn(), ready: Promise.resolve() },
+});
 
 afterEach(() => {
   cleanup();

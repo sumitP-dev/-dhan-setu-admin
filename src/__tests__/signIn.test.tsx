@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ApiError } from '../api/errors';
 import { getAccessToken } from '../api/session';
 import * as authApi from '../features/auth/api';
+import { mockAdminApi } from '../testing/adminApi';
 import { ADMIN, renderApp, signedInState, signedOutState } from '../testing/renderWithProviders';
 
 const challenge = {
@@ -29,6 +30,7 @@ async function enterCredentials(user: ReturnType<typeof userEvent.setup>) {
 
 describe('sign-in', () => {
   beforeEach(() => {
+    mockAdminApi();
     vi.spyOn(authApi, 'login').mockResolvedValue(challenge);
     vi.spyOn(authApi, 'verifyCode').mockResolvedValue(session);
   });
@@ -115,12 +117,16 @@ describe('sign-in', () => {
 });
 
 describe('signed in', () => {
+  beforeEach(() => {
+    mockAdminApi();
+  });
+
   it('shows the layout with the admin’s name, and signs out from the menu', async () => {
     const logout = vi.spyOn(authApi, 'logout').mockResolvedValue();
     const user = userEvent.setup();
     const { router, store } = renderApp('/', signedInState);
 
-    await waitFor(() => expect(router.state.location.pathname).toBe('/kyc'));
+    await waitFor(() => expect(router.state.location.pathname).toBe('/users'));
     await user.click(screen.getByRole('button', { name: 'Account' }));
     await user.click(await screen.findByRole('menuitem', { name: 'Sign out' }));
 
